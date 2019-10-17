@@ -47,4 +47,23 @@ krotka=(
 
 #Zad9
 slownik={1234:"Adam Małysz",567:"Mateusz Włucznikowski",12345:"Andrzej Duda"}
-print(slownik)
+# print(slownik)
+
+#Zad10
+lista=[123,123,345]
+s=set(lista)
+
+#Zad11
+# for i in range(1,10):
+#     print(i)
+
+#Zad12
+# for j in reversed(range(20,100,5)) :
+#     print(j)
+
+#Zad13
+listaa=[{1234:"Adam Małysz"},{567:"Mateusz Włucznikowski"},{12345:"Andrzej Duda"}]
+index=0
+for i in listaa:
+    print(index,":",i)
+    index+=1
