@@ -8,17 +8,17 @@ class User(models.Model):
     password = models.CharField(max_length=30)
 
 class Shop(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30,unique=True)
 
 class Measure(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30,unique=True)
     short = models.CharField(max_length=10)
 
 class Type(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=50,unique=True)
 
 class Product(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=80)
     unit_of_measure = models.ForeignKey(Measure,on_delete=models.CASCADE)
     idType = models.ForeignKey(Type,on_delete=models.CASCADE)
     idShop = models.ForeignKey(Shop,on_delete=models.CASCADE)
