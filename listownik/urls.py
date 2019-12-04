@@ -5,9 +5,10 @@ from rest_framework.documentation import include_docs_urls
 from . import views
 
 urlpatterns = [
-    path('users/', views.UserView.as_view({'get': 'list', 'post': 'create'}), name='users'),
+    #path('users/', views.UserView.as_view({'get': 'list', 'post': 'create'}), name='users'),
     path('user/<int:pk>', views.UserDetailView.as_view({'get': 'retrieve','patch':'partial_update', 'delete':'destroy'}), name='user'),
-
+    path('register/',views.UserRegister.as_view(),name='register'),
+    path('login/',views.LoginView.as_view(),name="login"),
     path('shops/', views.ShopView.as_view({'get': 'list', 'post': 'create'}), name='shops'),
     path('shop/<int:pk>',views.ShopDetailView.as_view({'get': 'retrieve', 'patch': 'partial_update', 'delete': 'destroy'}),name='shop'),
 
@@ -37,6 +38,7 @@ urlpatterns = [
 
     path('list_subscribers/', views.List_SubscriberView.as_view({'get': 'list', 'post': 'create'}),name='list_subscribers'),
     path('list_subscriber/<int:pk>',views.List_SubscriberDetailView.as_view({'get': 'retrieve', 'patch': 'partial_update', 'delete': 'destroy'}),name='list_subscriber'),
+
 
     url(r'^api-auth/', include('rest_framework.urls')),
     url(r'docs/', include_docs_urls('Docs')),

@@ -1,8 +1,10 @@
 from rest_framework import serializers
+from rest_framework.settings import api_settings
+
 from .models import *
 
 class UserSerializer(serializers.ModelSerializer):
-    # nick = serializers.CharField(max_length=30)
+    # username = serializers.CharField(max_length=30)
     # email = serializers.EmailField()
     # password = serializers.CharField(max_length=30)
 
@@ -24,7 +26,6 @@ class ShopSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shop
         fields = '__all__'
-
 
 
 class MeasureSerializer(serializers.ModelSerializer):

@@ -1,21 +1,48 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import *
+from .models import User
 from .serializers import *
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin, RetrieveModelMixin
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.response import Response
-from rest_framework import status
+from passlib.hash import pbkdf2_sha256
+from rest_framework.parsers import *
+from django.http import JsonResponse
+from django.contrib.auth.hashers import check_password,make_password
 
-class UserView(
-    ListModelMixin,
-    CreateModelMixin,
-    GenericViewSet
-):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+
+class UserRegister(APIView):
+    def post(self, request):
+        users = User.objects.all()
+
+        for var in users:
+            if var.email == request.data['email']:
+                return JsonResponse({'Error':'User already exists'},status=400)
+            request.data['password'] = make_password(request.data['password'],salt=None,hasher='default')
+            serializer = UserSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return JsonResponse({'Info':"Ok"},status=200)
+            return JsonResponse({'Error':serializer.errors},status=400)
+
+def checkpassword(data, user):
+    users = User.objects.all()
+    for var in users:
+        if var.email == data['email']:
+            if check_password(data['password'], var.password):
+                return True
+            return False
+
+class LoginView(APIView):
+    def post(self, request):
+        users = User.objects.all()
+        for var in users:
+            if var.email == request.data['email']:
+                if checkpassword(request.data, users):
+                    return JsonResponse({'id': var.id}, status=200)
+        return JsonResponse({'Error': 'User is not exists'}, status=400)
+
 
 class UserDetailView(
     RetrieveModelMixin,
