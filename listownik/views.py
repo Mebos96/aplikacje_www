@@ -8,25 +8,23 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.parsers import *
 from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password,make_password
-from .models import User, List, Subscription
+from .models import *
 #import djoser
 
 class UserRegister(APIView):
     def post(self, request):
         users = User.objects.all()
-
         for var in users:
             if var.email == request.data['email']:
-                return JsonResponse({'Error':'User already exists'},status=400)
-            request.data['password'] = make_password(request.data['password'],salt=None,hasher='default')
+                return JsonResponse({'Error': 'User already exists'}, status=400)
+            request.data['password'] = make_password(request.data['password'], salt=None, hasher='default')
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return JsonResponse({'Info':"Ok"},status=200)
-            return JsonResponse({'Error':serializer.errors},status=400)
+                return JsonResponse({'Info': "Ok"}, status=200)
+            return JsonResponse({'Error': serializer.errors}, status=400)
 
-def checkpassword(data, user):
-    users = User.objects.all()
+def checkpassword(data, users):
     for var in users:
         if var.email == data['email']:
             if check_password(data['password'], var.password):
@@ -43,20 +41,22 @@ class LoginView(APIView):
         return JsonResponse({'Error': 'User is not exists'}, status=400)
 
 class UserLists(APIView):
-    def post(self,request):
-        queryset = List.objects.filter(idOwner_id = int(request.data['idUser'])).values()
-        return JsonResponse({"data":list(queryset)},status=200)
+    def post(self, request):
+        queryset = List.objects.filter(idOwner_id=int(request.data['idUser'])).values()
+        return JsonResponse({"data": list(queryset)}, status=200)
 
 class SharedLists(APIView):
-    def post(self,request):
-        subscriptions = Subscription.objects.filter(idSubscription = int(request.data['idUser'])).values()
+    def post(self, request):
+        subscriptions = Subscription.objects.filter(idSubscription=int(request.data['idUser'])).values()
         lists = List.objects.values()
         wyjscie=[]
         for var in subscriptions:
             for a in lists:
                 if var['idList_id'] == a['id']:
+                    user = User.objects.filter(id=a['idOwner_id']).values('username')
+                    a['username'] = user[0]['username']
                     wyjscie.append(a)
-        return JsonResponse({"data":list(wyjscie)},status=200)
+        return JsonResponse({"data" : list(wyjscie)}, status=200)
 
 class UserDetailView(
     RetrieveModelMixin,
