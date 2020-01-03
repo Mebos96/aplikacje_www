@@ -22,7 +22,7 @@ class UserRegister(APIView):
             if serializer.is_valid():
                 serializer.save()
                 return JsonResponse({'Info': "Ok"}, status=200)
-            return JsonResponse({'Error': serializer.errors}, status=400)
+            return JsonResponse({'Error': serializer.errors}, status=404)
 
 def checkpassword(data, users):
     for var in users:
@@ -49,14 +49,26 @@ class SharedLists(APIView):
     def post(self, request):
         subscriptions = Subscription.objects.filter(idSubscription=int(request.data['idUser'])).values()
         lists = List.objects.values()
-        wyjscie=[]
-        for var in subscriptions:
-            for a in lists:
-                if var['idList_id'] == a['id']:
-                    user = User.objects.filter(id=a['idOwner_id']).values('username')
-                    a['username'] = user[0]['username']
-                    wyjscie.append(a)
-        return JsonResponse({"data" : list(wyjscie)}, status=200)
+        data = []
+        for sub in subscriptions:
+            for lis in lists:
+                if sub['idList_id'] == lis['id']:
+                    user = User.objects.filter(id=lis['idOwner_id']).values('username')
+                    lis['favorite'] = sub['favorite']
+                    lis['username'] = user[0]['username']
+                    lis['idSub'] = sub['id']
+                    data.append(lis)
+        return JsonResponse({"data": list(data)}, status=200)
+
+class Username(APIView):
+    def post(self,request):
+        users = User.objects.values()
+        data = []
+        for user in users:
+            if request.data['name'] != '':
+                if request.data['name'].lower() in user['username'].lower():
+                    data.append(user)
+        return JsonResponse({"data": list(data[:5])}, status=200)
 
 class UserDetailView(
     RetrieveModelMixin,
