@@ -13,10 +13,10 @@ from .models import *
 
 class UserRegister(APIView):
     def post(self, request):
-        users = User.objects.all()
-        for var in users:
-            if var.email == request.data['email']:
-                return JsonResponse({'Error': 'User already exists'}, status=400)
+        abc = User.objects.filter(email=request.data['email']).values()
+        if len(abc) > 0:
+            return JsonResponse({'Error': 'User already exists'}, status=400)
+        else:
             request.data['password'] = make_password(request.data['password'], salt=None, hasher='default')
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid():
@@ -68,7 +68,33 @@ class Username(APIView):
             if request.data['name'] != '':
                 if request.data['name'].lower() in user['username'].lower():
                     data.append(user)
+        return JsonResponse({"data": list(data[:10])}, status=200)
+
+class ProductName(APIView):
+    def post(self,request):
+        products = Product.objects.values()
+        data = []
+        for product in products:
+            if request.data['name'] != '':
+                if request.data['name'].lower() in product['name'].lower():
+                    data.append(product)
         return JsonResponse({"data": list(data[:5])}, status=200)
+
+class ShopName(APIView):
+    def post(self,request):
+        shops = Shop.objects.values()
+        data = []
+        for shop in shops:
+            if request.data['name'] != '':
+                if request.data['name'].lower() in shop['name'].lower():
+                    data.append(shop)
+        return JsonResponse({"data": list(data[:5])}, status=200)
+
+class LastListId(APIView):
+    def get(self, request):
+        obj = List.objects.values()
+        id = obj[len(obj)-1]
+        return JsonResponse({"id": id['id']},status = 200)
 
 class UserDetailView(
     RetrieveModelMixin,
@@ -78,6 +104,14 @@ class UserDetailView(
 ):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        try:
+            request.data['password'] = make_password(request.data['password'], salt=None, hasher='default')
+            return self.update(request, *args, **kwargs)
+        except:
+            return self.update(request, *args, **kwargs)
 
 
 class ShopView(

@@ -35,7 +35,6 @@ class Product(models.Model):
     name = models.CharField(max_length=80)
     unit_of_measure = models.ForeignKey(Measure,on_delete=models.CASCADE)
     idType = models.ForeignKey(Type,on_delete=models.CASCADE)
-    idShop = models.ForeignKey(Shop,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -53,6 +52,8 @@ class List_Product(models.Model):
     idList = models.ForeignKey(List,on_delete=models.CASCADE)
     idProduct = models.ForeignKey(Product, on_delete=models.CASCADE)
     isBought = models.BooleanField(default=False)
+    idShop = models.ForeignKey(Shop,on_delete=models.CASCADE)
+    amount = models.DecimalField(decimal_places=2, max_digits=3, default=0)
 
     def __str__(self):
         return self.name
