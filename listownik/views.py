@@ -96,6 +96,11 @@ class LastListId(APIView):
         id = obj[len(obj)-1]
         return JsonResponse({"id": id['id']},status = 200)
 
+class GetProducts(APIView):
+    def post(self, request):
+        products = List_Product.objects.filter(idList_id=request.data['idList']).values()
+        return JsonResponse({"data": list(products)},status = 200)
+
 class UserDetailView(
     RetrieveModelMixin,
     UpdateModelMixin,

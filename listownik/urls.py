@@ -17,6 +17,7 @@ urlpatterns = [
     path('username/', views.Username.as_view(), name='username'),#uzyty
     path('productName/', views.ProductName.as_view(), name='productName'),#uzyty
     path('shopName/', views.ShopName.as_view(), name='shopName'),# uzyty
+    path('getProducts/', views.GetProducts.as_view(), name='getProducts'),  # uzyty
 
     path('listId/', views.LastListId.as_view(), name='lisId'),#uzyty
 
