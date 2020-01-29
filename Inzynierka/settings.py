@@ -28,7 +28,6 @@ SECRET_KEY = 'xmv&5ddq#+ag_7o718_mzo7sec!8h9=a-#ob0fiv&r9t+v*0*u'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '192.168.8.101'
 ]
 
 
@@ -80,17 +79,6 @@ WSGI_APPLICATION = 'Inzynierka.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'mysql.connector.django',
-        'HOST':'213.184.8.199',
-        'PORT':'3306',
-        'NAME': 'adamczukb',
-        'USER': 'adamczukb',
-        'PASSWORD':'bartek123238'
-    }
-}
 
 
 # Password validation
