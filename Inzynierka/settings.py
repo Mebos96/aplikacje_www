@@ -20,7 +20,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'xmv&5ddq#+ag_7o718_mzo7sec!8h9=a-#ob0fiv&r9t+v*0*u'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -76,18 +75,6 @@ WSGI_APPLICATION = 'Inzynierka.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'mysql.connector.django',
-        'HOST':'213.184.8.199',
-        'PORT':'3306',
-        'NAME': 'adamczukb',
-        'USER': 'adamczukb',
-        'PASSWORD':'bartek123238'
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
